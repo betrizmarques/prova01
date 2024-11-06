@@ -1,0 +1,206 @@
+# prova01
+
+CE302 Considere as notas de alunos descritas no vetor numérico nomeado em Notas e os alunos que entregaram os trabalhos descritas no vetor lógico nomeado em Trabalhos Notas
+
+## João Maria José Ana Pedro Paula
+
+## 34 47 90 78 46 44
+
+## Carlos Mariana Fernando Luiza
+
+## 79 65 60 97
+
+Trabalhos
+
+## João Maria José Ana Pedro Paula
+
+## FALSE FALSE TRUE TRUE FALSE FALSE
+
+## Carlos Mariana Fernando Luiza
+
+## TRUE TRUE TRUE TRUE
+
+Responda as seguintes questões, considerando duas casas decimais.
+
+```{r}
+library(tidyverse)
+library(data.table)
+desempenho_alunos <- data.frame(notas = c(34, 47, 90, 78, 46, 44, 79, 65, 60, 97),
+trabalhos = c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE),
+names = c("João", "Maria", "José", "Ana", "Pedro", "Paula", "Carlos", "Mariana", "Fernando", "Luiza"))
+
+
+
+
+```
+
+A raiz quadrada da média das notas dos alunos é:
+
+```{r}
+raiz_quadrada_media_notas <- mean(notas) %>% 
+  sqrt()
+raiz_quadrada_media_notas
+```
+A mediana dos alunos que entregaram o trabalho é:
+
+```{r}
+alunos_entregaram_trabalho <- subset(desempenho_alunos, trabalhos == TRUE)
+  alunos_entregaram_trabalho
+
+  median(alunos_entregaram_trabalho$notas)
+
+```
+A maior nota dentre os alunos que não entregaram o trabalho é:
+```{r}
+  alunos_que_nao_entregaram <- subset(desempenho_alunos, trabalhos == FALSE)
+maior_nota_alunos_que_nao_entregaram <- max(alunos_que_nao_entregaram$notas)
+maior_nota_alunos_que_nao_entregaram
+```
+
+Assuma que a média para aprovação direta é 70, alunos com média inferior a 40 tem reprovação direta, os demais estão em recuperação. A quantidade de alunos em recuperação que entregou os trabalhos é:
+Answer 4 Questão 1
+```{r}
+aprovacao_direta <- subset(desempenho_alunos, notas>70)
+aprovacao_direta
+
+recuperacao <- subset(desempenho_alunos, notas < 70 & notas > 40)
+recuperacao
+
+recuperacao_e_entregou_trabalhos <- subset(recuperacao, trabalhos == TRUE) %>% 
+  summarise(n = n())
+recuperacao_e_entregou_trabalhos
+```
+
+O desvio-padrão das notas dos alunos que entregaram os trabalhos é:
+```{r}
+desvio_padrao_alunos_que_entregaram_trabalho <- sd(alunos_entregaram_trabalho$notas)
+desvio_padrao_alunos_que_entregaram_trabalho
+```
+
+
+Uma equipe de analistas está avaliando o desempenho de uma carteira de 10 ativos em um período de 5 meses, antes e depois de uma mudança na alocação do capital. Para isso, os retornos mensais percentuais de cada ativo foram organizados em matrizes de dimensões 5×10, onde cada linha representa um mês e cada coluna representa um ativo. Considere as matrizes de retornos antes da mudança X e após a mudança Y apresentadas abaixo.
+
+```{r}
+ativos <- c("Ativo_1", "Ativo_2", "Ativo_3", "Ativo_4", "Ativo_5", "Ativo_6", "Ativo_7", "Ativo_8", "Ativo_9", "Ativo_10")
+mes_1 <- c(-1.1,  1.2, -0.2,   2.8,   -4.9,   3.9 ,-3.5  ,   2.6   , -1.6   ,   2.5)
+mes_2 <- c(-2.1 ,   -4.1    , 0.2    ,-5.0   , -1.5   ,  1.7, -0.6  ,   2.5    , 3.3    , -3.0)
+mes_3 <- c(-3.7   ,  3.1  ,  -1.2 ,   -4.0  ,  -4.6 ,   -0.1  ,3.9    , 1.6 ,    2.2  ,   -3.5)
+mes_4 <- c(-2.4  ,  -2.6,     2.9   , -1.5,     3.0   , -0.2 ,-1.2  ,  -1.7 ,   -2.7  ,    0.4)
+mes_5 <- c( -2.7   , -4.9   , -0.6   , -1.4    , 1.6    ,-3.1 ,-3.8   , -0.8 ,    3.3  ,   -0.8)
+
+X <- rbind(mes_1, mes_2, mes_3, mes_4, mes_5)
+colnames(X) <- c("Ativo_1", "Ativo_2", "Ativo_3", "Ativo_4", "Ativo_5", "Ativo_6", "Ativo_7", "Ativo_8", "Ativo_9", "Ativo_10")
+
+mes_1 <- c( -4.8 ,    0.6  ,  -0.1   , -0.5   ,  1.8    , 3.5 ,-3.8   ,  0.8    , 0.7   ,   4.2)
+mes_2 <- c(-2.8   , -1.6    , 2.6 ,   -3.8    ,-1.1 ,   -1.1 ,0.4 ,   -1.8   ,  3.5    ,  4.6)
+mes_3 <- c( 1.6  ,   2.3  ,   3.1  ,   3.0  ,  -0.4   , -5.0  ,4.8  ,   4.7  ,  -3.9    ,  4.7)
+mes_4 <- c(4.9   ,  2.5   ,  0.0  ,   0.1   , -3.6   ,  3.9 , 3.0   , -0.3    , 3.9    ,  0.6)
+mes_5 <- c(1.3   , -0.5  ,  -5.0  ,  -1.6,     1.6   , -1.7 ,-1.5   ,  0.0  ,  0.3    ,  4.1)
+
+Y <- rbind( mes_1, mes_2, mes_3, mes_4, mes_5)
+colnames(Y) <- c("Ativo_1", "Ativo_2", "Ativo_3", "Ativo_4", "Ativo_5", "Ativo_6", "Ativo_7", "Ativo_8", "Ativo_9", "Ativo_10")
+
+```
+Os analistas desejam identificar os ativos com maior retorno médio na carteira antes da mudança de alocação. Escreva um código em R que calcule a média de retorno para cada ativo e identifique o ativo com a maior média. O ativo com o maior retorno médio é o:
+```{r}
+media_ativos_antes_alocacao <- colMeans(X)
+media_ativos_antes_alocacao
+
+ativo_com_maior_retorno <- max(media_ativos_antes_alocacao)
+ativo_com_maior_retorno
+
+```
+Para visualizar como os ativos se relacionam, os analistas decidem multiplicar a matriz (Y) pela sua transposta, criando uma nova matriz que reflete as similaridades entre os ativos. A soma dos elementos da diagonal princial dessa matriz é
+```{r}
+nova_matriz <- Y%*%t(Y) %>% 
+  diag() %>% 
+  sum()
+
+nova_matriz
+
+```
+Após a mudança na alocação, um segundo conjunto de dados foi coletado para a mesma carteira de ativos. O ativo que apresentou a maior alteração absoluta média de retorno após a mudança foi o:
+```{r}
+ativos_antes_alocacao <- colMeans(X)
+ativos_antes_alocacao
+
+
+ativos_pos_alocacao <- colMeans(Y)
+ativos_pos_alocacao
+
+ativo_com_maior_alteracao <- abs(ativos_antes_alocacao-ativos_pos_alocacao) %>% 
+  max()
+
+
+ativo_com_maior_alteracao
+
+ativo_com_maior_alteracao
+max <- max(ativo_com_maior_alteracao)###
+max
+```
+Mantendo apenas os cinco ativos com maior média de retorno antes da mudança, o determinante da matriz de retornos correspondente é:
+```{r}
+matriz <- select(media_ativos_antes_alocacao ####
+```
+
+
+ Considere o banco de dados contendo informações sobre 10000 restaurantes de Fast Food nos Estados Unidos. Considere que o ano de entrada na base (dateAdded) é a data de abertura do restaurante.
+
+Importante: Considere as seguintes alterações à serem realizadas nos nomes dos restaurantes:
+
+    Homogeinize os nomes dos restaurantes para letras maiúsculas/minusculas
+    Remova espaços em branco extras
+    Substititua apóstrofos (’S) por S
+    Remova abreviações de “JR.”, substituindo por “JR”
+    Substitua hífens por espaços
+```{r}
+library(readr)
+
+dados <- readr::read_csv("Datafiniti_Fast_Food_Restaurants.csv")
+
+dados$name <- toupper(dados$name)
+
+dados$name <-  str_replace( dados$name, "JR.", "JR" )
+
+dados$name <-  str_replace( dados$name, "-", " " )
+
+dados$name <-  str_replace( dados$name, "'S", "S" )
+
+```
+
+Juntos, os estados MO, UT, KY e WA possuem quantos restaurantes de Fast Food? 
+```{r}
+
+
+restaurantes_mo <- dados %>% 
+  filter(province == "MO") %>% 
+  summarise(contagem=n())
+
+restaurantes_ut <- dados %>% 
+  filter(province == "UT") %>% 
+  summarise(contagem=n())
+
+restaurantes_ky <-dados %>% 
+  filter(province == "KY") %>% 
+  summarise(contagem=n())
+
+
+restaurantes_wa <-dados %>% 
+  filter(province == "WA") %>% 
+  summarise(contagem=n())
+
+
+restaurantes_estados <- restaurantes_ky+restaurantes_ut+restaurantes_wa+restaurantes_mo
+restaurantes_estados$contagem
+```
+onsiderando o estado com mais restaurantes de Fast Food, dentre MO, UT, KY e WA quantos restaurantes ele possui? 
+
+
+O estado que mais consome Fast Food da rede ANIS CHICKEN é: 
+```{r}
+ANIS_CHICKEN %>% 
+  filter(name == "ANIS CHICKEN")
+
+
+```
+
